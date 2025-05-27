@@ -1,7 +1,7 @@
 {
-  "name": "new_project_alias",
+  "name": "routes_login_test",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "dev": "vite",
