@@ -5,6 +5,7 @@ export const Route = createFileRoute('/pineapple/')({
 });
 
 function RouteComponent() {
+  const search = Route.useSearch();
   return (
     <div>
       <nav className="flex gap-2 mb-10">
@@ -18,7 +19,13 @@ function RouteComponent() {
           Option 3
         </Link>
       </nav>
-      <div>halloo...</div>
+      {Object.keys(search).length > 0 && (
+        <div>
+          Amount: {search.amount} Pineapples
+          <br />
+          Origin: {search.origin}
+        </div>
+      )}
     </div>
   );
 }

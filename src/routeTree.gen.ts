@@ -15,6 +15,7 @@ import { Route as IndexImport } from './routes/index'
 import { Route as PineappleIndexImport } from './routes/pineapple/index'
 import { Route as KiwiIndexImport } from './routes/kiwi/index'
 import { Route as AboutIndexImport } from './routes/about/index'
+import { Route as KiwiIdImport } from './routes/kiwi/$id_'
 
 // Create/Update Routes
 
@@ -42,6 +43,12 @@ const AboutIndexRoute = AboutIndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const KiwiIdRoute = KiwiIdImport.update({
+  id: '/kiwi/$id_',
+  path: '/kiwi/$id',
+  getParentRoute: () => rootRoute,
+} as any)
+
 // Populate the FileRoutesByPath interface
 
 declare module '@tanstack/react-router' {
@@ -51,6 +58,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/kiwi/$id_': {
+      id: '/kiwi/$id_'
+      path: '/kiwi/$id'
+      fullPath: '/kiwi/$id'
+      preLoaderRoute: typeof KiwiIdImport
       parentRoute: typeof rootRoute
     }
     '/about/': {
@@ -81,6 +95,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/kiwi/$id': typeof KiwiIdRoute
   '/about': typeof AboutIndexRoute
   '/kiwi': typeof KiwiIndexRoute
   '/pineapple': typeof PineappleIndexRoute
@@ -88,6 +103,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/kiwi/$id': typeof KiwiIdRoute
   '/about': typeof AboutIndexRoute
   '/kiwi': typeof KiwiIndexRoute
   '/pineapple': typeof PineappleIndexRoute
@@ -96,6 +112,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/kiwi/$id_': typeof KiwiIdRoute
   '/about/': typeof AboutIndexRoute
   '/kiwi/': typeof KiwiIndexRoute
   '/pineapple/': typeof PineappleIndexRoute
@@ -103,15 +120,16 @@ export interface FileRoutesById {
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/about' | '/kiwi' | '/pineapple'
+  fullPaths: '/' | '/kiwi/$id' | '/about' | '/kiwi' | '/pineapple'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/about' | '/kiwi' | '/pineapple'
-  id: '__root__' | '/' | '/about/' | '/kiwi/' | '/pineapple/'
+  to: '/' | '/kiwi/$id' | '/about' | '/kiwi' | '/pineapple'
+  id: '__root__' | '/' | '/kiwi/$id_' | '/about/' | '/kiwi/' | '/pineapple/'
   fileRoutesById: FileRoutesById
 }
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  KiwiIdRoute: typeof KiwiIdRoute
   AboutIndexRoute: typeof AboutIndexRoute
   KiwiIndexRoute: typeof KiwiIndexRoute
   PineappleIndexRoute: typeof PineappleIndexRoute
@@ -119,6 +137,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  KiwiIdRoute: KiwiIdRoute,
   AboutIndexRoute: AboutIndexRoute,
   KiwiIndexRoute: KiwiIndexRoute,
   PineappleIndexRoute: PineappleIndexRoute,
@@ -135,6 +154,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/kiwi/$id_",
         "/about/",
         "/kiwi/",
         "/pineapple/"
@@ -142,6 +162,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/kiwi/$id_": {
+      "filePath": "kiwi/$id_.tsx"
     },
     "/about/": {
       "filePath": "about/index.tsx"
