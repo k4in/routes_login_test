@@ -1,0 +1,5 @@
+{
+  "entry": ["src/main.tsx"],
+  "project": ["src/**"],
+  "ignore": ["templates", "src/routeTree.gen.ts", "src/components/shadcn/**", "src/vite-env.d.ts"]
+}
