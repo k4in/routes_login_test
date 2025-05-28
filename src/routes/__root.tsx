@@ -3,6 +3,7 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Avatar } from '@/components/avatar';
 import { NavLink } from '@/components/nav-link';
+import { getSearchState } from '@/lib/utils/searchState';
 
 export const Route = createRootRoute({
   component: () => (
@@ -11,8 +12,8 @@ export const Route = createRootRoute({
         <div className="flex justify-between px-20 h-16 items-center">
           <nav className="flex gap-2">
             <NavLink title="Home" to="/" />
-            <NavLink title="Pineapple" to="/pineapple" />
-            <NavLink title="Kiwi" to="/kiwi" />
+            {/* <NavLink title="Pineapple" to="/pineapple" /> */}
+            <NavLink title="Kiwi" to="/kiwi" search={() => getSearchState('kiwi')} />
             <NavLink title="About" to="/about" />
           </nav>
           <Avatar />
