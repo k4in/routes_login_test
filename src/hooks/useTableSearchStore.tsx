@@ -76,21 +76,3 @@ export function useTableSearchStore(route: string) {
     [searchDataForRoute, setSpecificSearchStore]
   );
 }
-
-// export function useTableSearchStore(route: string) {
-//   const setSearchStore = useGlobalSearchStore((state) => state.setSearchStore);
-
-//   // Use a more stable selector with useMemo
-//   const searchStore = useGlobalSearchStore(
-//     // This is the recommended way in Zustand to select state that depends on component props (like route). It memoizes the selector function, ensuring it's stable as long as route doesn't change, which optimizes re-renders and subscriptions.
-//     useMemo(() => (state) => state.searchStores[route] ?? EMPTY_SEARCH, [route])
-//   );
-
-//   return useMemo(
-//     () => ({
-//       searchStore,
-//       setSearchStore: (search: TableSearch) => setSearchStore(route, search),
-//     }),
-//     [searchStore, setSearchStore, route]
-//   );
-// }
