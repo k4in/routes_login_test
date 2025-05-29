@@ -11,6 +11,7 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LoginImport } from './routes/login'
 import { Route as IndexImport } from './routes/index'
 import { Route as PineappleIndexImport } from './routes/pineapple/index'
 import { Route as KiwiIndexImport } from './routes/kiwi/index'
@@ -19,6 +20,12 @@ import { Route as PineappleIdImport } from './routes/pineapple/$id_'
 import { Route as KiwiIdImport } from './routes/kiwi/$id_'
 
 // Create/Update Routes
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const IndexRoute = IndexImport.update({
   id: '/',
@@ -67,6 +74,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexImport
       parentRoute: typeof rootRoute
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
     '/kiwi/$id_': {
       id: '/kiwi/$id_'
       path: '/kiwi/$id'
@@ -109,6 +123,7 @@ declare module '@tanstack/react-router' {
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/kiwi/$id': typeof KiwiIdRoute
   '/pineapple/$id': typeof PineappleIdRoute
   '/about': typeof AboutIndexRoute
@@ -118,6 +133,7 @@ export interface FileRoutesByFullPath {
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/kiwi/$id': typeof KiwiIdRoute
   '/pineapple/$id': typeof PineappleIdRoute
   '/about': typeof AboutIndexRoute
@@ -128,6 +144,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
+  '/login': typeof LoginRoute
   '/kiwi/$id_': typeof KiwiIdRoute
   '/pineapple/$id_': typeof PineappleIdRoute
   '/about/': typeof AboutIndexRoute
@@ -139,16 +156,25 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/login'
     | '/kiwi/$id'
     | '/pineapple/$id'
     | '/about'
     | '/kiwi'
     | '/pineapple'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/kiwi/$id' | '/pineapple/$id' | '/about' | '/kiwi' | '/pineapple'
+  to:
+    | '/'
+    | '/login'
+    | '/kiwi/$id'
+    | '/pineapple/$id'
+    | '/about'
+    | '/kiwi'
+    | '/pineapple'
   id:
     | '__root__'
     | '/'
+    | '/login'
     | '/kiwi/$id_'
     | '/pineapple/$id_'
     | '/about/'
@@ -159,6 +185,7 @@ export interface FileRouteTypes {
 
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  LoginRoute: typeof LoginRoute
   KiwiIdRoute: typeof KiwiIdRoute
   PineappleIdRoute: typeof PineappleIdRoute
   AboutIndexRoute: typeof AboutIndexRoute
@@ -168,6 +195,7 @@ export interface RootRouteChildren {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  LoginRoute: LoginRoute,
   KiwiIdRoute: KiwiIdRoute,
   PineappleIdRoute: PineappleIdRoute,
   AboutIndexRoute: AboutIndexRoute,
@@ -186,6 +214,7 @@ export const routeTree = rootRoute
       "filePath": "__root.tsx",
       "children": [
         "/",
+        "/login",
         "/kiwi/$id_",
         "/pineapple/$id_",
         "/about/",
@@ -195,6 +224,9 @@ export const routeTree = rootRoute
     },
     "/": {
       "filePath": "index.tsx"
+    },
+    "/login": {
+      "filePath": "login.tsx"
     },
     "/kiwi/$id_": {
       "filePath": "kiwi/$id_.tsx"
