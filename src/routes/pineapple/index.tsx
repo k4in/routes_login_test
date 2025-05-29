@@ -1,7 +1,8 @@
 import { useEffect } from 'react';
 import { createFileRoute, Link } from '@tanstack/react-router';
-import { saveSearchState, schema, type TableSearch } from '@/lib/utils/table-search-state';
+// import { schema, type TableSearch } from '@/lib/utils/table-search-state';
 import { SearchField } from '@/components/search-field';
+import { useTableSearchStore, schema, type TableSearch } from '@/hooks/useTableSearchStore';
 
 const ROUTE_PATH = 'pineapple';
 
@@ -12,13 +13,12 @@ export const Route = createFileRoute('/pineapple/')({
 
 function RouteComponent() {
   const search = Route.useSearch();
+  const setSearchStore = useTableSearchStore(ROUTE_PATH).setSearchStore;
 
   // Save search state whenever it changes
   useEffect(() => {
-    if (search.filter || search.sort || search.sortBy) {
-      saveSearchState(ROUTE_PATH, search);
-    }
-  }, [search]);
+    setSearchStore(search);
+  }, [search, setSearchStore]);
 
   return (
     <div>

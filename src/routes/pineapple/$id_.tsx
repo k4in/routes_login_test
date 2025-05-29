@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { Button } from '@/components/shadcn/button';
 import { Link } from '@tanstack/react-router';
-import { getSearchState } from '@/lib/utils/table-search-state';
+import { useTableSearchStore } from '@/hooks/useTableSearchStore';
 
 export const Route = createFileRoute('/pineapple/$id_')({
   component: RouteComponent,
@@ -9,7 +9,7 @@ export const Route = createFileRoute('/pineapple/$id_')({
 
 function RouteComponent() {
   const { id } = Route.useParams();
-  const savedSearch = getSearchState('pineapple');
+  const savedSearch = useTableSearchStore('pineapple').searchStore;
 
   return (
     <div>

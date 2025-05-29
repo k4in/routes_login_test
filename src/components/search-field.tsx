@@ -1,7 +1,7 @@
 import { Input } from './shadcn/input';
 import { Button } from './shadcn/button';
 import { useNavigate } from '@tanstack/react-router';
-import { type TableSearch } from '@/lib/utils/table-search-state';
+import { type TableSearch } from '@/hooks/useTableSearchStore';
 import { useState, useEffect } from 'react';
 
 export function SearchField({ search, route }: { search: TableSearch; route: string }) {
