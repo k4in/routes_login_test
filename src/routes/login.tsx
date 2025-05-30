@@ -3,32 +3,24 @@ import { useState } from 'react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Button } from '@/components/shadcn/button';
 import { Input } from '@/components/shadcn/input';
-import { authService } from '@/lib/services/authService';
+import { authQueryOptions } from '@/hooks/useAuth';
 import { z } from 'zod';
+import { login } from '@/lib/services/authService';
 
 const loginSearchSchema = z.object({
   redirect: z.string().optional(),
 });
 
 export const Route = createFileRoute('/login')({
-  validateSearch: loginSearchSchema,
-  beforeLoad: async ({ context }) => {
-    // Check if user is already authenticated
-    try {
-      const authData = await (context as { queryClient: any }).queryClient.fetchQuery({
-        queryKey: ['auth'],
-        queryFn: authService.checkAuth,
-        staleTime: 5 * 60 * 1000,
-        retry: false,
-      });
+  validateSearch: (search: Record<string, unknown>): z.infer<typeof loginSearchSchema> =>
+    loginSearchSchema.parse(search),
+  beforeLoad: async ({ context: { queryClient } }) => {
+    const authData = await queryClient.fetchQuery(authQueryOptions);
 
-      if (authData.data.is_authenticated) {
-        throw redirect({
-          to: '/',
-        });
-      }
-    } catch {
-      // If auth check fails, user is not authenticated, continue to login
+    if (authData.data.is_authenticated) {
+      throw redirect({
+        to: '/',
+      });
     }
   },
   component: LoginComponent,
@@ -43,11 +35,11 @@ function LoginComponent() {
   const search = Route.useSearch();
 
   const loginMutation = useMutation({
-    mutationFn: authService.login,
+    mutationFn: login,
     onSuccess: async (response) => {
       if (response.status === 'success' && response.data.is_authenticated) {
         // Invalidate and refetch auth query to update the cache
-        await queryClient.invalidateQueries({ queryKey: ['auth'] });
+        await queryClient.invalidateQueries({ queryKey: ['user_info'] });
 
         // Navigate to the intended destination or home
         const redirectTo = search.redirect || '/';

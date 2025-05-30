@@ -3,34 +3,17 @@ import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { Avatar } from '@/components/avatar';
 import { NavLink, NavLinkWithSearch } from '@/components/nav-link';
-import { authService } from '@/lib/services/authService';
+import { authQueryOptions } from '@/hooks/useAuth';
 
 export const Route = createRootRoute({
-  beforeLoad: async ({ context, location }) => {
-    // Skip auth check for login page
+  beforeLoad: async ({ context: { queryClient }, location }) => {
     if (location.pathname === '/login') {
       return;
     }
 
-    try {
-      const authData = await (context as { queryClient: any }).queryClient.fetchQuery({
-        queryKey: ['auth'],
-        queryFn: authService.checkAuth,
-        staleTime: 5 * 60 * 1000, // 5 minutes
-        retry: false,
-      });
+    const authData = await queryClient.fetchQuery(authQueryOptions);
 
-      if (!authData.data.is_authenticated) {
-        throw redirect({
-          to: '/login',
-          search: {
-            // Store the intended destination to redirect after login
-            redirect: location.href,
-          },
-        });
-      }
-    } catch {
-      // If auth check fails, redirect to login
+    if (!authData.data.is_authenticated) {
       throw redirect({
         to: '/login',
         search: {
@@ -39,7 +22,11 @@ export const Route = createRootRoute({
       });
     }
   },
-  component: () => (
+  component: RootComponent,
+});
+
+function RootComponent() {
+  return (
     <>
       <header className="bg-background border-b border-border/40 backdrop-blur-md sticky top-0 z-50">
         <div className="flex justify-between px-20 h-16 items-center">
@@ -59,5 +46,5 @@ export const Route = createRootRoute({
       <TanStackRouterDevtools />
       <ReactQueryDevtools initialIsOpen={false} />
     </>
-  ),
-});
+  );
+}
